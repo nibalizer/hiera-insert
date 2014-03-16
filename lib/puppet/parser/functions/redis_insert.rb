@@ -1,5 +1,5 @@
 module Puppet::Parser::Functions
-  newfunction(:redis_insert, :doc => << 'ENDHEREDOC') do |args|
+  newfunction(:redis_insert, :doc => <<-'ENDHEREDOC') do |args|
 
     Insert a key/value pair into a redis database.
 
@@ -16,8 +16,8 @@ module Puppet::Parser::Functions
 
     ENDHEREDOC
 
-    raise(Puppet::ParseError, "redis_insert(): Wrong number of arguments " +
-      "given (#{args.size} for 2)") if ( 1 >= args.size >= 3 )
+    #raise(Puppet::ParseError, "redis_insert(): Wrong number of arguments " +
+    #  "given (#{args.size} for 2)") if ( 1 >= args.size >= 3 )
 
     require 'redis'
 
@@ -25,7 +25,11 @@ module Puppet::Parser::Functions
 
     key = args[0]
     value = args[1]
-    prefix = args[2] or 'redis' 
+    if args[2]
+      prefix = args[2]
+    else
+      prefix = 'redis'
+    end
 
     redis.set(prefix + ':' + key, value)
 
